@@ -1,0 +1,62 @@
+{% load staticfiles %}
+
+{% if is_user or sidebar %}
+<link rel="stylesheet" href='{% static "css/settings.css" %}'>
+
+<div id="sidebar-toggle">
+    <button type="button" id="sidebarCollapse" class="btn btn-primary navbar-btn">
+        <i class="glyphicon glyphicon-align-left"></i>
+        Toggle Sidebar
+    </button>
+</div>
+
+<div class="wrapper">
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <img src="{{ request.user.profile.avatar }}" style="width: 200px; vertical-align: middle;" class="img-responsive img-circle align-middle">
+            <h3>{{ request.user.get_full_name }}</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+            <span id="sidebar-sub-header">Settings</span>
+            {% comment %}
+            <li>
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Home</a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <li><a href="#">Home 1</a></li>
+                    <li><a href="#">Home 2</a></li>
+                    <li><a href="#">Home 3</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">About</a>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">Pages</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <li><a href="#">Page 1</a></li>
+                    <li><a href="#">Page 2</a></li>
+                    <li><a href="#">Page 3</a></li>
+                </ul>
+            </li>
+            {% endcomment %}
+            <li>
+                <a href="{% url 'posts:draft' request.user.username %}">My Posts</a>
+            </li>
+            <li>
+                <a href="{% url 'accounts:profile' request.user.username %}">My Profile</a>
+            </li>
+            <li>
+            	<a href="{% url 'password_change' %}">Change Password</a>
+        </ul>
+
+        <ul class="list-unstyled CTAs">
+            <li><a href="{% url 'posts:list' %}" class="download">Back to frontpage</a></li>
+            <li><a href="{% url 'auth_logout' %}" class="article">Logout</a></li>
+        </ul>
+    </nav>
+</div>
+
+<!-- Custom Scroller Js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+<script src='{% static "js/settings.js" %}'></script>
+{% endif %}

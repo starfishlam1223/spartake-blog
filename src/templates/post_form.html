@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block theme %}
+{{ form.media }}
+	<link rel="stylesheet" href='{% static "css/quill.core.min.css" %}'>
+	<link rel="stylesheet" href='{% static "css/editor.css" %}'>
+	<link rel="stylesheet" href='{% static "css/post_form.css" %}'>
+{% endblock %}
+
+{% block head_extra %}
+{{ form.media }}
+{% endblock head_extra %}
+
+{% block content %}
+<div class='featureImg'>
+{% if instance.image %}
+	<img src='{{ instance.image }}' alt='featureImg' width='100%' id="feature">
+{% endif %}
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">
+			<div class="col-sm-12" id="input">
+				<h2><small>Title: </small></h2>
+{% if instance %}
+				<p>
+					<input class="form-control" type="text" id="title" value="{{ instance.title }}" placeholder="Enter the title here">
+				</p>
+				<p id='titleErr' class='err'>Title is required</p>
+				<h2><small>Publish Date: </small></h2>
+				<p>
+					Now? 
+					<input type="checkbox" id="now">
+					<div id='future'>
+						<input type="date" id="publish" value="{{ instance.publish|date:'Y-m-d' }}">
+					</div>
+				</p>
+				<p id='pubErr' class='err'>Publish date is in the past or have not entered</p>
+				<h2><small>Private: </small></h2>
+				<p>
+					{% if instance.private %}
+					<input type="checkbox" id="private" checked>
+					{% else %}
+					<input type="checkbox" id="private">
+					{% endif %}
+				</p>
+				<h2><small>Feature Image: <small></h2>
+				<p>
+					<input type="file" name="image" id="image" class="clearablefileinput">
+				</p>
+				<p id='featureErr' class='err'>Feature image is required</p></td>
+{% else %}
+				<p>
+					<input class="form-control" type="text" id="title" placeholder="Enter the title here">
+				</p>
+				<p id='titleErr' class='err'>Title is required</p>
+				<h2><small>Publish Date: </small></h2>
+				<p>
+					Now? 
+					<input type="checkbox" id="now" checked>
+					<div id='future' style="visibility: hidden;">
+						<input type="date" id="publish">
+					</div>
+				</p>
+				<p id='pubErr' class='err'>Publish date is in the past or have not entered</p></td>
+				<h2><small>Private: </small></h2>
+				<p>
+					<input type="checkbox" id="private">
+				</p>
+				<h2><small>Feature Image: </small></h2>
+				<p>
+					<input type="file" name="image" id="image" class="clearablefileinput">
+				</p>
+				<p id='featureErr' class='err'>Feature image is required</p></td>
+{% endif %}
+				<p><button class="btn btn-primary" id='submit'>Submit</button></p>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div id="sidebar-controls" class='col-sm-2' style='visibility: hidden'>
+	<!-- 		<button id="show-controls">show control</i></button> -->
+			<div class="controls">
+				<button id="divider-button" class="btn btn-primary">Divider</button>
+				<button id="image-button" class="btn btn-primary">Image</button>
+				<button id="video-button" class="btn btn-primary">Video</button>
+			</div>
+		</div>
+		<div class='col-xs-12 col-sm-8' id="contentContainer">
+			<h2 class="contentTag"><small>Content</small></h2>
+			<p id='contentErr' class='err'>Content is empty</p>
+			<article id="editor-container" ></article>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block script %} 
+{% if instance %}
+	<script>
+		var content = {{ instance.content|safe }};
+		var pid = "{{ instance.id }}";
+		var imgUpdate = 1;
+	</script>
+{% if instance.draft %}
+	<script>
+		var draft = true;
+	</script>
+{% else %}
+	<script>
+		var draft = false;
+	</script>
+{% endif %}
+{% if instance.published %}
+	<script>
+		var published = true;
+	</script>
+{% else %}
+	<script>
+		var published = false;
+	</script>
+{% endif %}
+	<script src='{% static "js/custom_quill.js" %}'></script>
+	<script src='{% static "js/post_form.js" %}'></script>
+	<script src='{% static "js/post_update.js" %}'></script>
+{% else %}
+	<script>
+		var imgUpdate = 0;
+	</script>
+	<script src='{% static "js/custom_quill.js" %}'></script>
+	<script src='{% static "js/post_form.js" %}'></script>
+	<script src='{% static "js/post_create.js" %}'></script>
+{% endif %}
+{% endblock %}
